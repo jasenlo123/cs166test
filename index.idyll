@@ -1,0 +1,141 @@
+[meta title:"CS166 - Preclass 11.2" description:"Adaptive networks" /]
+
+[Header
+  fullWidth:true
+  title:"CS166 - Preclass 11.2"
+  subtitle:"Adaptive networks"
+  author:"Jasen Lo"
+  authorLink:"https://idyll-lang.org"
+  date:`(new Date()).toDateString()`
+  background:"#222222"
+  color:"#ffffff"
+   /]
+
+
+## Equations
+
+  1.  We update the opinion of each person to move a bit closer together. The stronger their relationship, the more they will move their opinions closer to each other. The change in opinion of Person i when talking to Person j is:
+      [br /]  
+
+      [Equation] \Delta o_{i}= \alpha w_{i j}(o_{j}-o_{i}) [/Equation]
+      [br /]  
+      [br /]  
+
+  2.  People strengthen or weaken their relationships depending on whether they agree or disagree, respectively. During the same interaction as in Step 1, the weight of the edge connecting nodes i and j is also changed. The change in weight is:
+      [br /]  
+
+      [Equation] \Delta w_{i j}=\beta w_{i j}\left(1-w_{i j}\right)\left(1-\gamma\left|o_{i}-o_{j}\right|\right) [/Equation]
+      [br /]  
+      [br /]  
+
+
+### Parameters
+  1. [Equation] \alpha \in(0,0.5] [/Equation] : The larger α is, the faster people change their opinions to match other people’s. The closer α is to 0, the more stubborn (less likely to change their opinions) people are.
+
+    Adjust [Equation] \alpha [/Equation] : 
+    [var name:"alpha" value:0.03 /] 
+    [Range value:alpha min:0 max:1 step:0.01/]
+    [Display value:alpha /]
+
+  2. [Equation] \gamma>0 [/Equation] : If [Equation] \gamma \leq 1 [/Equation] then all weights will converge to 1 over time since differing opinions don’t matter enough to decrease edge weights. If [Equation] \gamma $>$ 1 [/Equation], the weight between two nodes will decrease if the opinions of the nodes are different enough - if [Equation] \left|o_{i}-o_{j}\right|>\gamma^{-1} [/Equation]
+
+    Adjust [Equation] \gamma[/Equation] : 
+    [var name:"gamma" value:4 /] 
+    [Range value:gamma min:0 max:20 step:0.1/]
+    [Display value:gamma /]
+
+  3. [Equation] \beta \in(0,1) [/Equation] 
+
+    Adjust [Equation] \beta [/Equation] : 
+    [var name:"beta" value:0.3 /]
+    [Range value:beta min:0 max:1 step:0.1/]
+    [Display value:beta /]
+
+### Variables
+
+  1. Opinion of Person i:
+    Adjust [Equation] o_{i}[/Equation] : 
+    [var name:"opinion_i" value:0.3 /]
+    [Range value:opinion_i min:0 max:1 step:0.01/]
+    [Display value:opinion_i /]
+
+  2. Opinion of Person j:
+  Adjust [Equation] o_{j}[/Equation] : 
+  [var name:"opinion_j" value:0.8 /]
+  [Range value:opinion_j min:0 max:1 step:0.01/]
+  [Display value:opinion_j /]
+
+  3. Edge Weight of Person i & Person j:
+  Adjust [Equation] w_{i j}[/Equation] : 
+  [var name:"weight_ij" value:0.9 /]
+  [Range value:weight_ij min:0 max:1 step:0.01/]
+  [Display value:weight_ij /]
+
+## Update
+
+
+[var name:"delta_o_i" value: `alpha * weight_ij * (opinion_i - opinion_j)` /]
+[var name:"new_o_i" value: `delta_o_i + opinion_i ` /]
+
+[var name:"delta_o_j" value: `alpha * weight_ij * (opinion_j - opinion_i)` /]
+[var name:"new_o_j" value: `delta_o_j + opinion_j ` /]
+
+[Equation] \Delta w_{i j}=\beta w_{i j}\left(1-w_{i j}\right)\left(1-\gamma\left|o_{i}-o_{j}\right|\right) [/Equation]
+[br/]
+[Equation] \Delta w_{i j} [/Equation] = 
+[Display value: beta/] *
+[Display value: weight_ij/] *
+(1 - [Display value: weight_ij/] ) *
+(1 - [Display value: gamma/] * | [Display value: opinion_i/] - [Display value: opinion_j/] |) = 
+[Display value: `beta * weight_ij * (1- weight_ij) * (1 - gamma * Math.abs(opinion_i - opinion_j)) `/] 
+[br/]
+
+
+[Equation] \text{Updated } w_{i j}  [/Equation] = [Display value: `beta * weight_ij * (1- weight_ij) * (1 - gamma * Math.abs(opinion_i - opinion_j)) `/]  + [Display value: weight_ij/] =  [Display value:`(beta * weight_ij * (1- weight_ij) * (1 - gamma * Math.abs(opinion_i - opinion_j))) + weight_ij`/]
+
+
+
+[Equation] \Delta o_{i} = \alpha w_{i j}(o_{j}-o_{i}) [/Equation]
+[br/]
+[Equation] \Delta o_{i} [/Equation] = 
+[Display value: alpha/] *
+[Display value: weight_ij/] *
+([Display value: opinion_i/] - [Display value: opinion_j/] )  = 
+[Display value: alpha * weight_ij * (opinion_i - opinion_j)/] 
+[br/]
+
+[Equation]\text{Updated } o_{i} [/Equation] = [Display value: 'alpha * weight_ij * (opinion_i - opinion_j)'/] + [Display value: opinion_i/] =  [Display value: `(alpha * weight_ij * (opinion_i - opinion_j)) + opinion_i`/]
+
+[Equation] \Delta o_{j} = \alpha w_{i j}(o_{i}-o_{j}) [/Equation]
+[br/]
+[Equation] \Delta o_{j} [/Equation] = 
+[Display value: alpha/] *
+[Display value: weight_ij/] *
+([Display value: opinion_j/] - [Display value: opinion_i/] )  = 
+[Display value: delta_o_j/] 
+[br/]
+
+
+[Equation] \text{Updated } o_{j} [/Equation] = [Display value: delta_o_j/] + [Display value: opinion_j/] =  [Display value: new_o_j/]
+
+
+## Questions about the model
+
+  1. Use equation (2) to show that if γ ≤ 1, all edge weights will eventually converge to a value of 1. Do this by showing that the change in weight, Δw , is always positive and that [Equation] w_{i j}  [/Equation] will therefore always increase towards 1.
+
+  sgdsfdsgdfgdsffdf
+
+  2. (Optional) Determine an upper bound on [Equation] \gamma [/Equation] for the model to still make sense. We need to avoid the possibility that edge weights can change too much — drop below 0 or grow above 1 in a step.
+
+  3. What happens when two nodes with very different opinions interact? Assume a very large difference in opinion [Equation] \left(o_{i}-o_{j} \approx 1\right) [/Equation]and calculate the new difference in opinion and the new weight after an update.
+
+  4. What happens when two nodes with very similar opinions interact?
+
+  5. What happens when two nodes with somewhat different opinions (differing by 0.4) interact?
+  
+  6. (Optional) Draw a vector field showing how the edge weight and difference in opinion values change in a single 2­person interaction like the ones you explored above, but for all values of [Equation] w_{i j} \in[0,1] [/Equation] and [Equation] \left|o_{i}-o_{j}\right| \in[0,1] [/Equation]. You can use the quiver() plot function in Matplotlib for this.
+
+
+
+
+
