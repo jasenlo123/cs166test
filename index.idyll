@@ -1,8 +1,8 @@
-[meta title:"CS166 - Preclass 11.2" description:"Adaptive networks" /]
+[meta title:"CS166" description:"Adaptive networks" /]
 
 [Header
   fullWidth:true
-  title:"CS166 - Preclass 11.2"
+  title:"CS166"
   subtitle:"Adaptive networks"
   author:"Jasen Lo"
   authorLink:"https://idyll-lang.org"
@@ -92,50 +92,3 @@
 
 
 [Equation] \text{Updated } w_{i j}  [/Equation] = [Display value: `beta * weight_ij * (1- weight_ij) * (1 - gamma * Math.abs(opinion_i - opinion_j)) `/]  + [Display value: weight_ij/] =  [Display value:`(beta * weight_ij * (1- weight_ij) * (1 - gamma * Math.abs(opinion_i - opinion_j))) + weight_ij`/]
-
-
-
-[Equation] \Delta o_{i} = \alpha w_{i j}(o_{j}-o_{i}) [/Equation]
-[br/]
-[Equation] \Delta o_{i} [/Equation] = 
-[Display value: alpha/] *
-[Display value: weight_ij/] *
-([Display value: opinion_i/] - [Display value: opinion_j/] )  = 
-[Display value: alpha * weight_ij * (opinion_i - opinion_j)/] 
-[br/]
-
-[Equation]\text{Updated } o_{i} [/Equation] = [Display value: 'alpha * weight_ij * (opinion_i - opinion_j)'/] + [Display value: opinion_i/] =  [Display value: `(alpha * weight_ij * (opinion_i - opinion_j)) + opinion_i`/]
-
-[Equation] \Delta o_{j} = \alpha w_{i j}(o_{i}-o_{j}) [/Equation]
-[br/]
-[Equation] \Delta o_{j} [/Equation] = 
-[Display value: alpha/] *
-[Display value: weight_ij/] *
-([Display value: opinion_j/] - [Display value: opinion_i/] )  = 
-[Display value: delta_o_j/] 
-[br/]
-
-
-[Equation] \text{Updated } o_{j} [/Equation] = [Display value: delta_o_j/] + [Display value: opinion_j/] =  [Display value: new_o_j/]
-
-
-## Questions about the model
-
-  1. Use equation (2) to show that if γ ≤ 1, all edge weights will eventually converge to a value of 1. Do this by showing that the change in weight, Δw , is always positive and that [Equation] w_{i j}  [/Equation] will therefore always increase towards 1.
-
-  sgdsfdsgdfgdsffdf
-
-  2. (Optional) Determine an upper bound on [Equation] \gamma [/Equation] for the model to still make sense. We need to avoid the possibility that edge weights can change too much — drop below 0 or grow above 1 in a step.
-
-  3. What happens when two nodes with very different opinions interact? Assume a very large difference in opinion [Equation] \left(o_{i}-o_{j} \approx 1\right) [/Equation]and calculate the new difference in opinion and the new weight after an update.
-
-  4. What happens when two nodes with very similar opinions interact?
-
-  5. What happens when two nodes with somewhat different opinions (differing by 0.4) interact?
-  
-  6. (Optional) Draw a vector field showing how the edge weight and difference in opinion values change in a single 2­person interaction like the ones you explored above, but for all values of [Equation] w_{i j} \in[0,1] [/Equation] and [Equation] \left|o_{i}-o_{j}\right| \in[0,1] [/Equation]. You can use the quiver() plot function in Matplotlib for this.
-
-
-
-
-
